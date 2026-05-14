@@ -828,6 +828,17 @@
     return valid;
   }
 
+  // Phone number auto-formatting → (XXX) XXX-XXXX
+  const phoneInput = document.getElementById("phone");
+  phoneInput.addEventListener("input", (e) => {
+    let digits = e.target.value.replace(/\D/g, "").slice(0, 10);
+    let formatted = "";
+    if (digits.length > 0) formatted = "(" + digits.slice(0, 3);
+    if (digits.length >= 4) formatted += ") " + digits.slice(3, 6);
+    if (digits.length >= 7) formatted += "-" + digits.slice(6, 10);
+    e.target.value = formatted;
+  });
+
   // Clear errors on input
   requiredText.forEach(id => {
     const input = document.getElementById(id).querySelector('input');
