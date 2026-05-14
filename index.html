@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carrier Profile — CAN·DOR Logistics</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green:      #81AE39;
+    --green-dark: #5a7a28;
+    --green-lite: #f0f6e8;
+    --black:      #141414;
+    --off-white:  #f8f8f6;
+    --white:      #ffffff;
+    --border:     #ddd;
+    --label:      #444;
+    --muted:      #777;
+    --section-bg: #f4f4f2;
+    --error:      #c0392b;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--off-white);
+    color: var(--black);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: var(--black);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 68px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 3px solid var(--green);
+  }
+
+  .brand {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: var(--green);
+    letter-spacing: 0.04em;
+  }
+
+  .brand span {
+    color: #aaa;
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    display: block;
+    margin-top: -4px;
+  }
+
+  .header-tag {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    color: #555;
+    text-transform: uppercase;
+  }
+
+  /* ── PAGE WRAPPER ── */
+  .page {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem 4rem;
+  }
+
+  .page-intro {
+    margin-bottom: 2rem;
+  }
+
+  .page-intro h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    color: var(--black);
+    margin-bottom: 0.5rem;
+  }
+
+  .page-intro h1 em {
+    color: var(--green);
+    font-style: normal;
+  }
+
+  .page-intro p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.6;
+    max-width: 580px;
+  }
+
+  /* ── FORM CARD ── */
+  .form-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 1.25rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+
+  .section-head {
+    background: var(--section-bg);
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .sec-badge {
+    background: var(--green);
+    color: var(--white);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    padding: 3px 8px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .section-head h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--black);
+  }
+
+  .section-body {
+    padding: 1.25rem;
+  }
+
+  /* ── FIELD GRID ── */
+  .field-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .field-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .field-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .field-grid.cols-1 { grid-template-columns: 1fr; }
+
+  @media (max-width: 560px) {
+    .field-grid.cols-3,
+    .field-grid.cols-2 { grid-template-columns: 1fr; }
+  }
+
+  /* ── FIELD ── */
+  .field { display: flex; flex-direction: column; gap: 5px; }
+
+  .field label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--label);
+  }
+
+  .field label .req {
+    color: var(--green);
+    margin-left: 2px;
+  }
+
+  .field input[type="text"],
+  .field input[type="email"],
+  .field input[type="tel"],
+  .field textarea {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.9rem;
+    color: var(--black);
+    background: var(--white);
+    transition: border-color 0.15s, box-shadow 0.15s;
+    outline: none;
+  }
+
+  .field input:focus,
+  .field textarea:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px rgba(129, 174, 57, 0.12);
+  }
+
+  .field input.error,
+  .field textarea.error {
+    border-color: var(--error);
+  }
+
+  .field .err-msg {
+    font-size: 0.72rem;
+    color: var(--error);
+    display: none;
+  }
+
+  .field.has-error .err-msg { display: block; }
+  .field.has-error input,
+  .field.has-error textarea { border-color: var(--error); }
+
+  .field textarea {
+    resize: vertical;
+    min-height: 90px;
+  }
+
+  /* ── SECTION DIVIDER ── */
+  .section-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 1.1rem 0;
+  }
+
+  /* ── RADIO / CHECKBOX GROUP ── */
+  .group-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--label);
+    margin-bottom: 0.6rem;
+    display: block;
+  }
+
+  .group-label .req { color: var(--green); margin-left: 2px; }
+
+  .check-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+  }
+
+  .check-group.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .check-group.cols-1 { grid-template-columns: 1fr; }
+
+  @media (max-width: 560px) {
+    .check-group,
+    .check-group.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    font-size: 0.85rem;
+    color: var(--black);
+    user-select: none;
+    background: var(--white);
+  }
+
+  .check-item:hover {
+    border-color: var(--green);
+    background: var(--green-lite);
+  }
+
+  .check-item input[type="checkbox"],
+  .check-item input[type="radio"] {
+    accent-color: var(--green);
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  .check-item:has(input:checked) {
+    border-color: var(--green);
+    background: var(--green-lite);
+  }
+
+  /* States grid */
+  .states-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.5rem;
+  }
+
+  @media (max-width: 560px) {
+    .states-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .state-field { display: flex; flex-direction: column; gap: 4px; }
+
+  .state-field label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  .state-field input {
+    text-align: center;
+    padding: 8px 6px;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--white);
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+
+  .state-field input:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px rgba(129,174,57,0.12);
+  }
+
+  /* ── TRUCK LIST BOX ── */
+  .truck-list-box {
+    background: var(--green-lite);
+    border: 1.5px solid var(--green);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .truck-list-icon {
+    font-size: 1.4rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .truck-list-text strong {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--green-dark);
+    margin-bottom: 4px;
+  }
+
+  .truck-list-text p {
+    font-size: 0.82rem;
+    color: var(--green-dark);
+    line-height: 1.5;
+  }
+
+  .truck-list-text a {
+    color: var(--green-dark);
+    font-weight: 700;
+    text-decoration: underline;
+  }
+
+  /* ── SUBMIT ── */
+  .submit-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+  }
+
+  .submit-note {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .submit-btn {
+    background: var(--green);
+    color: var(--white);
+    border: none;
+    padding: 13px 36px;
+    border-radius: 7px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    flex-shrink: 0;
+  }
+
+  .submit-btn:hover { background: var(--green-dark); }
+  .submit-btn:active { transform: scale(0.98); }
+  .submit-btn:disabled { background: #aaa; cursor: not-allowed; }
+
+  /* ── SUCCESS STATE ── */
+  .success-screen {
+    display: none;
+    text-align: center;
+    padding: 4rem 2rem;
+  }
+
+  .success-screen.visible { display: block; }
+
+  .success-icon {
+    width: 72px;
+    height: 72px;
+    background: var(--green);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 2rem;
+  }
+
+  .success-screen h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--black);
+    margin-bottom: 0.75rem;
+  }
+
+  .success-screen p {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    max-width: 480px;
+    margin: 0 auto 0.5rem;
+  }
+
+  .success-screen .dispatch-link {
+    color: var(--green-dark);
+    font-weight: 700;
+  }
+
+  /* ── FOOTER ── */
+  .site-footer {
+    background: var(--black);
+    border-top: 3px solid var(--green);
+    padding: 1.25rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .site-footer .brand-sm {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--green);
+    letter-spacing: 0.05em;
+  }
+
+  .site-footer p {
+    font-size: 0.75rem;
+    color: #555;
+  }
+
+  /* ── FORM-LEVEL ERROR ── */
+  .form-error-banner {
+    background: #fdf0ee;
+    border: 1.5px solid var(--error);
+    border-radius: 7px;
+    padding: 0.85rem 1.1rem;
+    font-size: 0.85rem;
+    color: var(--error);
+    margin-bottom: 1rem;
+    display: none;
+  }
+  .form-error-banner.visible { display: block; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="brand">
+    CAN·DOR LOGISTICS
+    <span>CARRIER NETWORK</span>
+  </div>
+  <div class="header-tag">Carrier Profile Submission</div>
+</header>
+
+<!-- MAIN -->
+<main class="page">
+
+  <div class="page-intro">
+    <h1>Carrier <em>Profile</em></h1>
+    <p>The more accurate your information, the better we can match you to freight that fits your operation. We will not waste your time with loads that don't work for you.</p>
+  </div>
+
+  <!-- SUCCESS SCREEN -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon">✓</div>
+    <h2>You're All Set</h2>
+    <p>Thank you for submitting your carrier profile. We'll be in touch when we have freight that fits your operation.</p>
+    <p>In the meantime, send your available truck lists to <a class="dispatch-link" href="mailto:dispatch@candorexp.com">dispatch@candorexp.com</a></p>
+  </div>
+
+  <!-- FORM -->
+  <form id="carrierForm" action="https://script.google.com/macros/s/AKfycbzZANxLQhqbkJMismTc01zhCCnSMsDWZumCojCKbxMnb9LhtXTiNZ9PtuVVekO4J7_U/exec" method="POST" novalidate>
+
+    <div class="form-error-banner" id="errorBanner">
+      Please fill in all required fields before submitting.
+    </div>
+
+    <!-- 01 CONTACT -->
+    <div class="form-card">
+      <div class="section-head">
+        <span class="sec-badge">01</span>
+        <h2>Contact Information</h2>
+      </div>
+      <div class="section-body">
+        <div class="field-grid cols-3">
+          <div class="field" id="f-company">
+            <label for="company">Company Name <span class="req">*</span></label>
+            <input type="text" id="company" name="Company Name" placeholder="ABC Trucking LLC">
+            <span class="err-msg">Required</span>
+          </div>
+          <div class="field" id="f-mc">
+            <label for="mc">MC # <span class="req">*</span></label>
+            <input type="text" id="mc" name="MC Number" placeholder="MC-XXXXXXX">
+            <span class="err-msg">Required</span>
+          </div>
+          <div class="field" id="f-dot">
+            <label for="dot">DOT # <span class="req">*</span></label>
+            <input type="text" id="dot" name="DOT Number" placeholder="XXXXXXX">
+            <span class="err-msg">Required</span>
+          </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <div class="field-grid cols-3">
+          <div class="field" id="f-contact">
+            <label for="contact">Contact Name <span class="req">*</span></label>
+            <input type="text" id="contact" name="Contact Name" placeholder="First Last">
+            <span class="err-msg">Required</span>
+          </div>
+          <div class="field" id="f-phone">
+            <label for="phone">Phone Number <span class="req">*</span></label>
+            <input type="tel" id="phone" name="Phone Number" placeholder="(000) 000-0000">
+            <span class="err-msg">Required</span>
+          </div>
+          <div class="field" id="f-email">
+            <label for="email">Quote / Dispatch Email <span class="req">*</span></label>
+            <input type="email" id="email" name="Dispatch Email" placeholder="dispatch@carrier.com">
+            <span class="err-msg">Required — enter a valid email</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 COVERAGE -->
+    <div class="form-card">
+      <div class="section-head">
+        <span class="sec-badge">02</span>
+        <h2>Coverage Area</h2>
+      </div>
+      <div class="section-body">
+
+        <span class="group-label">Service Area Type <span class="req">*</span></span>
+        <div class="check-group cols-1" id="f-coverage" style="grid-template-columns: repeat(3,1fr); margin-bottom: 1.1rem;">
+          <label class="check-item">
+            <input type="radio" name="Service Area" value="Local / Intrastate" required>
+            Local / Intrastate
+          </label>
+          <label class="check-item">
+            <input type="radio" name="Service Area" value="Regional">
+            Regional
+          </label>
+          <label class="check-item">
+            <input type="radio" name="Service Area" value="Nationwide">
+            Nationwide
+          </label>
+        </div>
+
+        <span class="group-label">Top 5 States You Run <span class="req">*</span></span>
+        <div class="states-grid" id="f-states">
+          <div class="state-field">
+            <label>State 1</label>
+            <input type="text" name="State 1" maxlength="2" placeholder="TX">
+          </div>
+          <div class="state-field">
+            <label>State 2</label>
+            <input type="text" name="State 2" maxlength="2" placeholder="CA">
+          </div>
+          <div class="state-field">
+            <label>State 3</label>
+            <input type="text" name="State 3" maxlength="2" placeholder="FL">
+          </div>
+          <div class="state-field">
+            <label>State 4</label>
+            <input type="text" name="State 4" maxlength="2" placeholder="GA">
+          </div>
+          <div class="state-field">
+            <label>State 5</label>
+            <input type="text" name="State 5" maxlength="2" placeholder="TN">
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 03 EQUIPMENT -->
+    <div class="form-card">
+      <div class="section-head">
+        <span class="sec-badge">03</span>
+        <h2>Equipment</h2>
+      </div>
+      <div class="section-body">
+        <span class="group-label">Check all that apply <span class="req">*</span></span>
+        <div class="check-group" id="f-equipment">
+          <label class="check-item"><input type="checkbox" name="Equipment" value="Dry Van"> Dry Van</label>
+          <label class="check-item"><input type="checkbox" name="Equipment" value="Reefer"> Reefer</label>
+          <label class="check-item"><input type="checkbox" name="Equipment" value="Flatbed"> Flatbed</label>
+          <label class="check-item"><input type="checkbox" name="Equipment" value="Step Deck"> Step Deck</label>
+          <label class="check-item"><input type="checkbox" name="Equipment" value="RGN / Lowboy"> RGN / Lowboy</label>
+          <label class="check-item"><input type="checkbox" name="Equipment" value="Power Only"> Power Only</label>
+          <label class="check-item"><input type="checkbox" name="Equipment" value="Hotshot"> Hotshot</label>
+          <label class="check-item"><input type="checkbox" name="Equipment" value="Cargo Van"> Cargo Van</label>
+          <label class="check-item"><input type="checkbox" name="Equipment" value="Box Truck"> Box Truck</label>
+          <label class="check-item"><input type="checkbox" name="Equipment" value="Sprinter / Straight Truck"> Sprinter / Straight Truck</label>
+          <label class="check-item"><input type="checkbox" name="Equipment" value="Large Straight Truck"> Large Straight Truck</label>
+          <label class="check-item"><input type="checkbox" name="Equipment" value="Reefer Sprinter / Straight Truck"> Reefer Sprinter / Straight Truck</label>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <div class="field">
+          <label for="eq-other">Other Equipment</label>
+          <input type="text" id="eq-other" name="Other Equipment" placeholder="Describe any equipment not listed above">
+        </div>
+      </div>
+    </div>
+
+    <!-- 04 SERVICES -->
+    <div class="form-card">
+      <div class="section-head">
+        <span class="sec-badge">04</span>
+        <h2>Services Offered</h2>
+      </div>
+      <div class="section-body">
+
+        <span class="group-label">Check all that apply <span class="req">*</span></span>
+        <div class="check-group cols-2" id="f-services">
+          <label class="check-item"><input type="checkbox" name="Services" value="Local P&D"> Local P&amp;D (Pickup &amp; Delivery)</label>
+          <label class="check-item"><input type="checkbox" name="Services" value="On-Demand / Expedite"> On-Demand / Expedite</label>
+          <label class="check-item"><input type="checkbox" name="Services" value="White Glove"> White Glove</label>
+          <label class="check-item"><input type="checkbox" name="Services" value="Team Drivers"> Team Drivers</label>
+          <label class="check-item"><input type="checkbox" name="Services" value="LTL"> LTL (Less Than Truckload)</label>
+          <label class="check-item"><input type="checkbox" name="Services" value="Hazmat Certified"> Hazmat Certified</label>
+          <label class="check-item"><input type="checkbox" name="Services" value="TSA Certified"> TSA Certified</label>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <div class="field">
+          <label for="svc-other">Other Services</label>
+          <input type="text" id="svc-other" name="Other Services" placeholder="Describe any services not listed above">
+        </div>
+
+        <div class="section-divider"></div>
+
+        <span class="group-label">Capacity Type <span class="req">*</span></span>
+        <div class="check-group cols-2" id="f-capacity">
+          <label class="check-item">
+            <input type="checkbox" name="Capacity Type" value="Dedicated">
+            Dedicated &mdash; freight exclusive to one shipper
+          </label>
+          <label class="check-item">
+            <input type="checkbox" name="Capacity Type" value="Non-Dedicated">
+            Non-Dedicated &mdash; shared trailer with other shippers
+          </label>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 05 AVAILABLE TRUCK LISTS -->
+    <div class="form-card">
+      <div class="section-head">
+        <span class="sec-badge">05</span>
+        <h2>Available Truck Lists</h2>
+      </div>
+      <div class="section-body">
+        <div class="truck-list-box">
+          <div class="truck-list-icon">🚛</div>
+          <div class="truck-list-text">
+            <strong>Send us your available truck list</strong>
+            <p>If you send out a regular available truck list, add us to your distribution. We check it daily and will match you to loads that fit your lanes and equipment.</p>
+            <p style="margin-top:6px;">Send to: <a href="mailto:dispatch@candorexp.com">dispatch@candorexp.com</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 06 NOTES -->
+    <div class="form-card">
+      <div class="section-head">
+        <span class="sec-badge">06</span>
+        <h2>Anything Else We Should Know</h2>
+      </div>
+      <div class="section-body">
+        <div class="field">
+          <label for="notes">Notes &amp; Preferences</label>
+          <textarea id="notes" name="Notes" placeholder="No-touch only, no NYC, drop &amp; hook preferred, hazmat endorsement details, special certifications, etc."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="form-card">
+      <div class="section-body">
+        <div class="submit-row">
+          <p class="submit-note">Fields marked <strong style="color:var(--green)">*</strong> are required. Your profile goes directly to the CAN·DOR dispatch team.</p>
+          <button type="submit" class="submit-btn" id="submitBtn">Submit Profile</button>
+        </div>
+      </div>
+    </div>
+
+  </form>
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <span class="brand-sm">CAN·DOR LOGISTICS</span>
+  <p>Questions? Contact us at dispatch@candorexp.com</p>
+</footer>
+
+<script>
+  const form = document.getElementById('carrierForm');
+  const successScreen = document.getElementById('successScreen');
+  const errorBanner = document.getElementById('errorBanner');
+  const submitBtn = document.getElementById('submitBtn');
+
+  // Required field definitions
+  const requiredText = ['f-company','f-mc','f-dot','f-contact','f-phone','f-email'];
+
+  function validateEmail(val) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+  }
+
+  function validateForm() {
+    let valid = true;
+
+    // Text fields
+    requiredText.forEach(id => {
+      const wrapper = document.getElementById(id);
+      const input = wrapper.querySelector('input');
+      if (!input.value.trim()) {
+        wrapper.classList.add('has-error');
+        valid = false;
+      } else if (id === 'f-email' && !validateEmail(input.value.trim())) {
+        wrapper.classList.add('has-error');
+        valid = false;
+      } else {
+        wrapper.classList.remove('has-error');
+      }
+    });
+
+    // Service area radio
+    const coverageChecked = document.querySelector('input[name="Service Area"]:checked');
+    const coverageGroup = document.getElementById('f-coverage');
+    if (!coverageChecked) {
+      coverageGroup.style.outline = '2px solid var(--error)';
+      coverageGroup.style.borderRadius = '6px';
+      valid = false;
+    } else {
+      coverageGroup.style.outline = '';
+    }
+
+    // At least 1 state
+    const stateInputs = document.querySelectorAll('.states-grid input');
+    const statesGroup = document.getElementById('f-states');
+    const anyState = Array.from(stateInputs).some(i => i.value.trim());
+    if (!anyState) {
+      statesGroup.style.outline = '2px solid var(--error)';
+      statesGroup.style.borderRadius = '6px';
+      valid = false;
+    } else {
+      statesGroup.style.outline = '';
+    }
+
+    // At least 1 equipment
+    const eqChecked = document.querySelectorAll('input[name="Equipment"]:checked');
+    const eqGroup = document.getElementById('f-equipment');
+    if (eqChecked.length === 0) {
+      eqGroup.style.outline = '2px solid var(--error)';
+      eqGroup.style.borderRadius = '6px';
+      valid = false;
+    } else {
+      eqGroup.style.outline = '';
+    }
+
+    // At least 1 service
+    const svcChecked = document.querySelectorAll('input[name="Services"]:checked');
+    const svcGroup = document.getElementById('f-services');
+    if (svcChecked.length === 0) {
+      svcGroup.style.outline = '2px solid var(--error)';
+      svcGroup.style.borderRadius = '6px';
+      valid = false;
+    } else {
+      svcGroup.style.outline = '';
+    }
+
+    // At least 1 capacity type
+    const capChecked = document.querySelectorAll('input[name="Capacity Type"]:checked');
+    const capGroup = document.getElementById('f-capacity');
+    if (capChecked.length === 0) {
+      capGroup.style.outline = '2px solid var(--error)';
+      capGroup.style.borderRadius = '6px';
+      valid = false;
+    } else {
+      capGroup.style.outline = '';
+    }
+
+    return valid;
+  }
+
+  // Clear errors on input
+  requiredText.forEach(id => {
+    const input = document.getElementById(id).querySelector('input');
+    input.addEventListener('input', () => {
+      document.getElementById(id).classList.remove('has-error');
+    });
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorBanner.classList.remove('visible');
+
+    if (!validateForm()) {
+      errorBanner.classList.add('visible');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting...';
+
+    try {
+      const data = new FormData(form);
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (response.ok) {
+        form.style.display = 'none';
+        successScreen.classList.add('visible');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        throw new Error('Submission failed');
+      }
+    } catch (err) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit Profile';
+      errorBanner.textContent = 'Something went wrong. Please try again or email dispatch@candorexp.com directly.';
+      errorBanner.classList.add('visible');
+    }
+  });
+</script>
+
+</body>
+</html>
