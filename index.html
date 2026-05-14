@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Carrier Profile — CAN·DOR Logistics</title>
+<title>Carrier Profile — CAN·DOR Expedite</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -485,8 +485,8 @@
 <!-- HEADER -->
 <header class="site-header">
   <div class="brand">
-    CAN·DOR LOGISTICS
-    <span>CARRIER NETWORK</span>
+    CAN·DOR EXPEDITE
+    <span>EXPEDITE NETWORK</span>
   </div>
   <div class="header-tag">Carrier Profile Submission</div>
 </header>
@@ -572,15 +572,15 @@
         <span class="group-label">Service Area Type <span class="req">*</span></span>
         <div class="check-group cols-1" id="f-coverage" style="grid-template-columns: repeat(3,1fr); margin-bottom: 1.1rem;">
           <label class="check-item">
-            <input type="radio" name="Service Area" value="Local / Intrastate" required>
+            <input type="checkbox" name="Service Area" value="Local / Intrastate">
             Local / Intrastate
           </label>
           <label class="check-item">
-            <input type="radio" name="Service Area" value="Regional">
+            <input type="checkbox" name="Service Area" value="Regional">
             Regional
           </label>
           <label class="check-item">
-            <input type="radio" name="Service Area" value="Nationwide">
+            <input type="checkbox" name="Service Area" value="Nationwide">
             Nationwide
           </label>
         </div>
@@ -723,7 +723,7 @@
     <div class="form-card">
       <div class="section-body">
         <div class="submit-row">
-          <p class="submit-note">Fields marked <strong style="color:var(--green)">*</strong> are required. Your profile goes directly to the CAN·DOR dispatch team.</p>
+          <p class="submit-note">Fields marked <strong style="color:var(--green)">*</strong> are required. Your profile goes directly to the CAN·DOR Expedite dispatch team.</p>
           <button type="submit" class="submit-btn" id="submitBtn">Submit Profile</button>
         </div>
       </div>
@@ -734,7 +734,7 @@
 
 <!-- FOOTER -->
 <footer class="site-footer">
-  <span class="brand-sm">CAN·DOR LOGISTICS</span>
+  <span class="brand-sm">CAN·DOR EXPEDITE</span>
   <p>Questions? Contact us at dispatch@candorexp.com</p>
 </footer>
 
@@ -770,9 +770,9 @@
     });
 
     // Service area radio
-    const coverageChecked = document.querySelector('input[name="Service Area"]:checked');
+    const coverageChecked = document.querySelectorAll('input[name="Service Area"]:checked');
     const coverageGroup = document.getElementById('f-coverage');
-    if (!coverageChecked) {
+    if (coverageChecked.length === 0) {
       coverageGroup.style.outline = '2px solid var(--error)';
       coverageGroup.style.borderRadius = '6px';
       valid = false;
