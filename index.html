@@ -918,6 +918,47 @@
     });
   });
 
+  const SUPABASE_URL = 'https://klsgkduzhyntilugibnv.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtsc2drZHV6aHludGlsdWdpYm52Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzMDA5ODIsImV4cCI6MjA5NDg3Njk4Mn0.IwHrQl1S7ib5ADIHw-IVe1XFBKLOtJWxM29-gpQPVBM';
+
+  async function supabaseRequest(path, method, body) {
+    const res = await fetch(SUPABASE_URL + path, {
+      method,
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation'
+      },
+      body: body ? JSON.stringify(body) : undefined
+    });
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error(err);
+    }
+    if (res.status === 204) return [];
+    return res.json();
+  }
+
+  async function sendSlackNotification(carrier) {
+    // Post to Supabase edge or just log - Slack notification via The Hub backend
+    // Store notification flag in Supabase for The Hub to display
+    try {
+      await supabaseRequest('/rest/v1/carrier_notifications', 'POST', {
+        company_name: carrier.company_name,
+        mc_number: carrier.mc_number,
+        contact_name: carrier.contact_name,
+        phone: carrier.phone,
+        equipment_list: carrier.equipment_list,
+        top_states: carrier.top_states,
+        is_new: carrier.is_new,
+        created_at: new Date().toISOString()
+      });
+    } catch(e) {
+      console.log('Notification log failed:', e);
+    }
+  }
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     errorBanner.classList.remove('visible');
@@ -932,21 +973,86 @@
     submitBtn.textContent = 'Submitting...';
 
     try {
-      const data = new FormData(form);
-      const response = await fetch(form.action, {
-        method: 'POST',
-        body: data,
-        headers: { 'Accept': 'application/json' }
-      });
+      const fd = new FormData(form);
 
-      if (response.ok) {
-        form.style.display = 'none';
-        successScreen.classList.add('visible');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else {
-        throw new Error('Submission failed');
+      // Collect all fields
+      const companyName = fd.get('Company Name')?.trim() || '';
+      const mcNumber = fd.get('MC #')?.trim() || '';
+      const dotNumber = fd.get('DOT #')?.trim() || '';
+      const contactName = fd.get('Contact Name')?.trim() || '';
+      const phone = fd.get('Phone Number')?.trim() || '';
+      const email = fd.get('Quote / Dispatch Email')?.trim() || '';
+      const serviceArea = fd.get('Service Area') || '';
+      const capacityType = fd.getAll('Capacity Type').join(', ');
+      const equipment = fd.getAll('Equipment').join(', ');
+      const services = fd.getAll('Services').join(', ');
+      const airportCodes = fd.get('Airport Codes') || '';
+      const cargoInsurance = fd.get('Cargo Insurance') || '';
+      const otherEquipment = fd.get('Other Equipment') || '';
+      const otherServices = fd.get('Other Services') || '';
+      const notes = fd.get('Notes') || '';
+
+      // Collect top states
+      const stateInputs = document.querySelectorAll('.states-grid input');
+      const topStates = Array.from(stateInputs)
+        .map(i => i.value.trim().toUpperCase())
+        .filter(Boolean)
+        .join(', ');
+
+      // Check if carrier exists by MC#
+      let existingCarrier = null;
+      if (mcNumber) {
+        const existing = await supabaseRequest(
+          `/rest/v1/carriers?mc_number=eq.${encodeURIComponent(mcNumber)}&limit=1`,
+          'GET'
+        );
+        if (existing && existing.length > 0) existingCarrier = existing[0];
       }
+
+      const carrierData = {
+        company_name: companyName,
+        mc_number: mcNumber,
+        dot_number: dotNumber,
+        contact_name: contactName,
+        phone: phone,
+        email: email,
+        service_area: serviceArea,
+        top_states: topStates,
+        equipment_list: equipment,
+        services_list: services,
+        capacity_type: capacityType,
+        airport_codes: airportCodes || null,
+        cargo_insurance: cargoInsurance || null,
+        other_equipment: otherEquipment || null,
+        other_services: otherServices || null,
+        carrier_notes: notes || null,
+        questionnaire_submitted_at: new Date().toISOString(),
+        carrier_type: 'Prospect'
+      };
+
+      let isNew = false;
+      if (existingCarrier) {
+        // Update existing carrier
+        await supabaseRequest(
+          `/rest/v1/carriers?id=eq.${existingCarrier.id}`,
+          'PATCH',
+          carrierData
+        );
+      } else {
+        // Create new carrier
+        await supabaseRequest('/rest/v1/carriers', 'POST', carrierData);
+        isNew = true;
+      }
+
+      // Log notification
+      await sendSlackNotification({ ...carrierData, is_new: isNew });
+
+      form.style.display = 'none';
+      successScreen.classList.add('visible');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
     } catch (err) {
+      console.error(err);
       submitBtn.disabled = false;
       submitBtn.textContent = 'Submit Profile';
       errorBanner.textContent = 'Something went wrong. Please try again or email dispatch@candorexp.com directly.';
