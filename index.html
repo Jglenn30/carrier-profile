@@ -661,6 +661,16 @@
           <label class="check-item"><input type="checkbox" name="Services" value="LTL"> LTL (Less Than Truckload)</label>
           <label class="check-item"><input type="checkbox" name="Services" value="Hazmat Certified"> Hazmat Certified</label>
           <label class="check-item"><input type="checkbox" name="Services" value="TSA Certified"> TSA Certified</label>
+          <label class="check-item"><input type="checkbox" name="Services" value="High Value" id="chk-high-value" onchange="toggleHighValue(this)"> High Value</label>
+        </div>
+
+        <!-- High Value cargo insurance — shown only when High Value is checked -->
+        <div id="high-value-block" style="display:none; margin-top:0.75rem; padding:1rem; background:var(--green-lite); border:1.5px solid var(--green); border-radius:8px;">
+          <div class="field" id="f-cargo-insurance">
+            <label for="cargo-insurance">Cargo Insurance Coverage Limit <span class="req">*</span></label>
+            <input type="text" id="cargo-insurance" name="Cargo Insurance Limit" placeholder="e.g. $1,000,000" autocomplete="off">
+            <span class="err-msg">Required when High Value is selected</span>
+          </div>
         </div>
 
         <div class="section-divider"></div>
@@ -769,6 +779,17 @@
       }
     });
 
+    // Cargo insurance required if High Value checked
+    const highValueChecked = document.getElementById('chk-high-value').checked;
+    const cargoInput = document.getElementById('cargo-insurance');
+    const cargoWrapper = document.getElementById('f-cargo-insurance');
+    if (highValueChecked && !cargoInput.value.trim()) {
+      cargoWrapper.classList.add('has-error');
+      valid = false;
+    } else {
+      cargoWrapper.classList.remove('has-error');
+    }
+
     // Service area radio
     const coverageChecked = document.querySelectorAll('input[name="Service Area"]:checked');
     const coverageGroup = document.getElementById('f-coverage');
@@ -826,6 +847,21 @@
     }
 
     return valid;
+  }
+
+  // High Value toggle — show/hide cargo insurance field
+  function toggleHighValue(cb) {
+    const block = document.getElementById('high-value-block');
+    const input = document.getElementById('cargo-insurance');
+    if (cb.checked) {
+      block.style.display = 'block';
+      input.required = true;
+    } else {
+      block.style.display = 'none';
+      input.required = false;
+      input.value = '';
+      document.getElementById('f-cargo-insurance').classList.remove('has-error');
+    }
   }
 
   // Phone number auto-formatting → (XXX) XXX-XXXX
