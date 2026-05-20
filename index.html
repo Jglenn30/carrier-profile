@@ -977,17 +977,17 @@
 
       // Collect all fields
       const companyName = fd.get('Company Name')?.trim() || '';
-      const mcNumber = fd.get('MC #')?.trim() || '';
-      const dotNumber = fd.get('DOT #')?.trim() || '';
+      const mcNumber = fd.get('MC Number')?.trim() || '';
+      const dotNumber = fd.get('DOT Number')?.trim() || '';
       const contactName = fd.get('Contact Name')?.trim() || '';
       const phone = fd.get('Phone Number')?.trim() || '';
-      const email = fd.get('Quote / Dispatch Email')?.trim() || '';
-      const serviceArea = fd.get('Service Area') || '';
+      const email = fd.get('Dispatch Email')?.trim() || '';
+      const serviceArea = fd.getAll('Service Area').join(', ');
       const capacityType = fd.getAll('Capacity Type').join(', ');
       const equipment = fd.getAll('Equipment').join(', ');
       const services = fd.getAll('Services').join(', ');
       const airportCodes = fd.get('Airport Codes') || '';
-      const cargoInsurance = fd.get('Cargo Insurance') || '';
+      const cargoInsurance = fd.get('Cargo Insurance Limit') || '';
       const otherEquipment = fd.get('Other Equipment') || '';
       const otherServices = fd.get('Other Services') || '';
       const notes = fd.get('Notes') || '';
