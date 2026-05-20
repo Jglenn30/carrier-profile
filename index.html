@@ -572,7 +572,7 @@
         <span class="group-label">Service Area Type <span class="req">*</span></span>
         <div class="check-group cols-1" id="f-coverage" style="grid-template-columns: repeat(3,1fr); margin-bottom: 1.1rem;">
           <label class="check-item">
-            <input type="checkbox" name="Service Area" value="Local / Intrastate">
+            <input type="checkbox" name="Service Area" value="Local / Intrastate" id="chk-local" onchange="toggleLocal(this)">
             Local / Intrastate
           </label>
           <label class="check-item">
@@ -583,6 +583,15 @@
             <input type="checkbox" name="Service Area" value="Nationwide">
             Nationwide
           </label>
+        </div>
+
+        <!-- Airport codes — shown only when Local / Intrastate is checked -->
+        <div id="local-airport-block" style="display:none; margin-bottom:1rem; padding:1rem; background:var(--green-lite); border:1.5px solid var(--green); border-radius:8px;">
+          <div class="field" id="f-airport-codes">
+            <label for="airport-codes">Airport Codes You Service <span class="req">*</span></label>
+            <input type="text" id="airport-codes" name="Airport Codes" placeholder="e.g. DFW, DAL, LAX, ORD" autocomplete="off">
+            <span class="err-msg">Required when Local / Intrastate is selected</span>
+          </div>
         </div>
 
         <span class="group-label">Top 5 States You Run <span class="req">*</span></span>
@@ -779,6 +788,17 @@
       }
     });
 
+    // Airport codes required if Local / Intrastate checked
+    const localChecked = document.getElementById('chk-local').checked;
+    const airportInput = document.getElementById('airport-codes');
+    const airportWrapper = document.getElementById('f-airport-codes');
+    if (localChecked && !airportInput.value.trim()) {
+      airportWrapper.classList.add('has-error');
+      valid = false;
+    } else {
+      airportWrapper.classList.remove('has-error');
+    }
+
     // Cargo insurance required if High Value checked
     const highValueChecked = document.getElementById('chk-high-value').checked;
     const cargoInput = document.getElementById('cargo-insurance');
@@ -847,6 +867,21 @@
     }
 
     return valid;
+  }
+
+  // Local / Intrastate toggle — show/hide airport codes field
+  function toggleLocal(cb) {
+    const block = document.getElementById('local-airport-block');
+    const input = document.getElementById('airport-codes');
+    if (cb.checked) {
+      block.style.display = 'block';
+      input.required = true;
+    } else {
+      block.style.display = 'none';
+      input.required = false;
+      input.value = '';
+      document.getElementById('f-airport-codes').classList.remove('has-error');
+    }
   }
 
   // High Value toggle — show/hide cargo insurance field
