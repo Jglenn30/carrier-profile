@@ -572,7 +572,7 @@
         <span class="group-label">Service Area Type <span class="req">*</span></span>
         <div class="check-group cols-1" id="f-coverage" style="grid-template-columns: repeat(3,1fr); margin-bottom: 1.1rem;">
           <label class="check-item">
-            <input type="checkbox" name="Service Area" value="Local / Intrastate" id="chk-local" onchange="toggleLocal(this)">
+            <input type="checkbox" name="Service Area" value="Local / Intrastate">
             Local / Intrastate
           </label>
           <label class="check-item">
@@ -583,15 +583,6 @@
             <input type="checkbox" name="Service Area" value="Nationwide">
             Nationwide
           </label>
-        </div>
-
-        <!-- Airport codes — shown only when Local / Intrastate is checked -->
-        <div id="local-airport-block" style="display:none; margin-bottom:1rem; padding:1rem; background:var(--green-lite); border:1.5px solid var(--green); border-radius:8px;">
-          <div class="field" id="f-airport-codes">
-            <label for="airport-codes">Airport Codes You Service <span class="req">*</span></label>
-            <input type="text" id="airport-codes" name="Airport Codes" placeholder="e.g. DFW, DAL, LAX, ORD" autocomplete="off">
-            <span class="err-msg">Required when Local / Intrastate is selected</span>
-          </div>
         </div>
 
         <span class="group-label">Top 5 States You Run <span class="req">*</span></span>
@@ -663,7 +654,7 @@
 
         <span class="group-label">Check all that apply <span class="req">*</span></span>
         <div class="check-group cols-2" id="f-services">
-          <label class="check-item"><input type="checkbox" name="Services" value="Local P&D"> Local P&amp;D (Pickup &amp; Delivery)</label>
+          <label class="check-item"><input type="checkbox" name="Services" value="Local P&D" id="chk-local-pd" onchange="toggleLocal(this)"> Local P&amp;D (Pickup &amp; Delivery)</label>
           <label class="check-item"><input type="checkbox" name="Services" value="On-Demand / Expedite"> On-Demand / Expedite</label>
           <label class="check-item"><input type="checkbox" name="Services" value="White Glove"> White Glove</label>
           <label class="check-item"><input type="checkbox" name="Services" value="Team Drivers"> Team Drivers</label>
@@ -671,6 +662,15 @@
           <label class="check-item"><input type="checkbox" name="Services" value="Hazmat Certified"> Hazmat Certified</label>
           <label class="check-item"><input type="checkbox" name="Services" value="TSA Certified"> TSA Certified</label>
           <label class="check-item"><input type="checkbox" name="Services" value="High Value" id="chk-high-value" onchange="toggleHighValue(this)"> High Value</label>
+        </div>
+
+        <!-- Airport codes — shown when Local P&D is checked -->
+        <div id="local-airport-block" style="display:none; margin-top:0.75rem; padding:1rem; background:var(--green-lite); border:1.5px solid var(--green); border-radius:8px;">
+          <div class="field" id="f-airport-codes">
+            <label for="airport-codes">Airport Codes You Service <span class="req">*</span></label>
+            <input type="text" id="airport-codes" name="Airport Codes" placeholder="e.g. DFW, DAL, LAX, ORD" autocomplete="off">
+            <span class="err-msg">Required when Local P&amp;D is selected</span>
+          </div>
         </div>
 
         <!-- High Value cargo insurance — shown only when High Value is checked -->
@@ -789,7 +789,7 @@
     });
 
     // Airport codes required if Local / Intrastate checked
-    const localChecked = document.getElementById('chk-local').checked;
+    const localChecked = document.getElementById('chk-local-pd').checked;
     const airportInput = document.getElementById('airport-codes');
     const airportWrapper = document.getElementById('f-airport-codes');
     if (localChecked && !airportInput.value.trim()) {
