@@ -1032,7 +1032,11 @@
 
       let isNew = false;
       if (existingCarrier) {
-        // Update existing carrier
+        // Never change carrier type on questionnaire submit
+        // Just update the profile info — keep their existing status
+        delete carrierData.carrier_type;
+        delete carrierData.is_cold;
+        // Update existing carrier profile info only
         await supabaseRequest(
           `/rest/v1/carriers?id=eq.${existingCarrier.id}`,
           'PATCH',
