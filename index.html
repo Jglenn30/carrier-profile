@@ -1051,6 +1051,39 @@
       // Log notification
       await sendSlackNotification({ ...carrierData, is_new: isNew });
 
+      // Also write to Google Sheet as backup
+      try {
+        const sheetFormData = new FormData();
+        sheetFormData.append('Company Name', companyName);
+        sheetFormData.append('MC Number', mcNumber);
+        sheetFormData.append('DOT Number', dotNumber);
+        sheetFormData.append('Contact Name', contactName);
+        sheetFormData.append('Phone Number', phone);
+        sheetFormData.append('Dispatch Email', email);
+        sheetFormData.append('Service Area', serviceArea);
+        sheetFormData.append('Airport Codes', airportCodes);
+        sheetFormData.append('State 1', document.querySelector('[name="State 1"]')?.value || '');
+        sheetFormData.append('State 2', document.querySelector('[name="State 2"]')?.value || '');
+        sheetFormData.append('State 3', document.querySelector('[name="State 3"]')?.value || '');
+        sheetFormData.append('State 4', document.querySelector('[name="State 4"]')?.value || '');
+        sheetFormData.append('State 5', document.querySelector('[name="State 5"]')?.value || '');
+        sheetFormData.append('Equipment', equipment);
+        sheetFormData.append('Other Equipment', otherEquipment);
+        sheetFormData.append('Services', services);
+        sheetFormData.append('Cargo Insurance Limit', cargoInsurance);
+        sheetFormData.append('Other Services', otherServices);
+        sheetFormData.append('Capacity Type', capacityType);
+        sheetFormData.append('Notes', notes);
+
+        await fetch('https://script.google.com/macros/s/AKfycbx1XacLKJskXieGLfcT_xeY5YXosSvrHpvM92ICJLKYsgG9BuJCBOj61jgrjnv7pO_sfQ/exec', {
+          method: 'POST',
+          body: sheetFormData
+        });
+      } catch (sheetErr) {
+        // Sheet write failure is non-blocking — Supabase already saved
+        console.warn('Google Sheet write failed:', sheetErr);
+      }
+
       form.style.display = 'none';
       successScreen.classList.add('visible');
       window.scrollTo({ top: 0, behavior: 'smooth' });
